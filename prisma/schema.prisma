@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Categoria {
+  id                 Int                  @id @default(autoincrement())
+  titulo             String               @db.VarChar(255)
+  categoriaDeProduto CatedoriaDeProduto[]
+
+  @@map("Categorias")
+}
+
+model Produto {
+  id         Int     @id @default(autoincrement())
+  titulo     String  @db.VarChar(255)
+  preco      Decimal @db.Decimal(10, 2)
+  imagem_url String  @db.Text
+  descricao  String  @default("") @db.VarChar(1000)
+  quantidade Int
+
+  data_insercao      DateTime             @default(now())
+  data_alteracao     DateTime             @updatedAt
+  categoriaDeProduto CatedoriaDeProduto[]
+  itemPedidos        ItemPedido[]
+
+  @@map("Produtos")
+}
+
+model CatedoriaDeProduto {
+  id           Int @id @default(autoincrement())
+  id_produto   Int
+  id_categoria Int
+
+  produto   Produto   @relation(fields: [id_produto], references: [id])
+  categoria Categoria @relation(fields: [id_categoria], references: [id])
+
+  @@map("ProdutoTemCategoria")
+}
+
+model Cliente {
+  id        Int      @id @default(autoincrement())
+  nome      String   @db.VarChar(255)
+  data_nasc DateTime @db.Date
+  documento String   @unique @db.VarChar(30)
+  email     String   @unique @db.VarChar(255)
+  senha     String   @db.VarChar(255)
+
+  ativo Boolean @default(true) @db.UnsignedTinyInt
+
+  data_insercao  DateTime @default(now())
+  data_alteracao DateTime @updatedAt
+  pedidos        Pedido[]
+
+  @@map("Clientes")
+}
+
+enum MeiosPagamento {
+  CREDITO
+  DEBITO
+  BOLETO
+  PIX
+}
+
+enum StatusPagamento {
+  APROVADO
+  PENDENTE
+  PROCESSANDO
+  NEGADO
+}
+
+model Pedido {
+  id           Int      @id @default(autoincrement())
+  valor        Decimal  @db.Decimal(10, 2)
+  data_criacao DateTime @default(now())
+  id_cliente   Int
+
+  meio_pagamento MeiosPagamento
+
+  cliente                Cliente                 @relation(fields: [id_cliente], references: [id])
+  statusPagamentoPedidos StatusPagamentoPedido[]
+  itemPedidos            ItemPedido[]
+
+  @@map("Pedidos")
+}
+
+model StatusPagamentoPedido {
+  id        Int             @id @default(autoincrement())
+  id_pedido Int
+  status    StatusPagamento
+  data      DateTime        @default(now())
+
+  pedido Pedido @relation(fields: [id_pedido], references: [id])
+
+  @@map("StatusPagamentoPedidos")
+}
+
+model ItemPedido {
+  id         Int     @id @default(autoincrement())
+  id_pedido  Int
+  id_produto Int
+  quantidade Int     @default(1)
+  valor_pago Decimal @db.Decimal(10, 2)
+
+  pedido  Pedido  @relation(fields: [id_pedido], references: [id])
+  produto Produto @relation(fields: [id_produto], references: [id])
+}

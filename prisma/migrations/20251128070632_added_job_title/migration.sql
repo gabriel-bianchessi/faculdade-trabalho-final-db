@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Clientes` MODIFY `ativo` TINYINT UNSIGNED NOT NULL DEFAULT true;

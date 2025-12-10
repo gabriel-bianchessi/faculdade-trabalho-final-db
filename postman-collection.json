@@ -1,0 +1,279 @@
+{
+	"info": {
+		"name": "Trabalho Final - API",
+		"description": "Coleção completa de endpoints da API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000/api"
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	],
+	"item": [
+		{
+			"name": "Clientes",
+			"item": [
+				{
+					"name": "Registrar Cliente",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"João Silva\",\n  \"data_nasc\": \"1990-01-15\",\n  \"documento\": \"12345678900\",\n  \"email\": \"joao@email.com\",\n  \"senha\": \"senha123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/clientes/registrar",
+							"host": ["{{base_url}}"],
+							"path": ["clientes", "registrar"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"if (response.token) {",
+									"    pm.collectionVariables.set('token', response.token);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"joao@email.com\",\n  \"senha\": \"senha123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/clientes/login",
+							"host": ["{{base_url}}"],
+							"path": ["clientes", "login"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Produtos",
+			"item": [
+				{
+					"name": "Popular Produtos (Fake Store API)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/produtos/popular",
+							"host": ["{{base_url}}"],
+							"path": ["produtos", "popular"]
+						}
+					}
+				},
+				{
+					"name": "Listar Produtos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/produtos",
+							"host": ["{{base_url}}"],
+							"path": ["produtos"]
+						}
+					}
+				},
+				{
+					"name": "Listar Produtos por Categoria",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/produtos?categoria=electronics",
+							"host": ["{{base_url}}"],
+							"path": ["produtos"],
+							"query": [
+								{
+									"key": "categoria",
+									"value": "electronics"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Listar Produtos por Título",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/produtos?titulo=shirt",
+							"host": ["{{base_url}}"],
+							"path": ["produtos"],
+							"query": [
+								{
+									"key": "titulo",
+									"value": "shirt"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Detalhar Produto",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/produtos/1",
+							"host": ["{{base_url}}"],
+							"path": ["produtos", "1"]
+						}
+					}
+				},
+				{
+					"name": "Validar Estoque (Autenticado)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quantidade\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/produtos/1/validar-estoque",
+							"host": ["{{base_url}}"],
+							"path": ["produtos", "1", "validar-estoque"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Pedidos (Autenticado)",
+			"item": [
+				{
+					"name": "Criar Pedido",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"meio_pagamento\": \"PIX\",\n  \"itens\": [\n    {\n      \"id_produto\": 1,\n      \"quantidade\": 2\n    },\n    {\n      \"id_produto\": 2,\n      \"quantidade\": 1\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/pedidos",
+							"host": ["{{base_url}}"],
+							"path": ["pedidos"]
+						}
+					}
+				},
+				{
+					"name": "Listar Meus Pedidos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/pedidos",
+							"host": ["{{base_url}}"],
+							"path": ["pedidos"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": ["{{base_url}}"],
+							"path": ["health"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

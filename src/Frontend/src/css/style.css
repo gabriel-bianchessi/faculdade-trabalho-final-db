@@ -1,0 +1,203 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.card {
+    transition: transform .25s ease, box-shadow .25s ease;
+    cursor: pointer;
+}
+
+.card.zoomed {
+    transform: scale(1.15);
+    z-index: 1000;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0,0,0,0.25);
+}
+
+.estoque {
+    display: none;
+}
+
+.card.zoomed .estoque {
+    display: block;
+}
+
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.product-image {
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.product-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    min-height: 3em;
+}
+
+.product-description {
+    font-size: 0.875rem;
+    color: #666;
+    flex-grow: 1;
+}
+
+#categories-container .btn {
+    text-align: left;
+    font-weight: 500;
+}
+
+#categories-container .btn.active {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+#search-input {
+    border-radius: 8px;
+}
+
+#search-input:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+@media (min-width: 768px) {
+    aside {
+        position: sticky;
+        top: 20px;
+        height: fit-content;
+    }
+}
+
+@media (max-width: 767px) {
+    .product-image {
+        height: 200px;
+    }
+    
+    aside {
+        margin-bottom: 20px;
+    }
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.toast-notification {
+    min-width: 300px;
+    max-width: 400px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideIn 0.3s ease-out;
+    border-left: 4px solid;
+}
+
+.toast-notification.success {
+    border-left-color: #28a745;
+}
+
+.toast-notification.error,
+.toast-notification.danger {
+    border-left-color: #dc3545;
+}
+
+.toast-notification.warning {
+    border-left-color: #ffc107;
+}
+
+.toast-notification.info {
+    border-left-color: #17a2b8;
+}
+
+.toast-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.toast-message {
+    font-size: 13px;
+    color: #666;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.toast-close:hover {
+    color: #333;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+.toast-notification.removing {
+    animation: slideOut 0.3s ease-in forwards;
+}
+
