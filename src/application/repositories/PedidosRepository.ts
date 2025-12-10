@@ -15,6 +15,7 @@ interface CreatePedidoData {
 
 export class PedidosRepository {
   async create(data: CreatePedidoData): Promise<Pedido> {
+    // SQL: BEGIN TRANSACTION
     return await prisma.$transaction(async (tx) => {
       for (const item of data.itens) {
         // SQL: SELECT * FROM Produto WHERE id = ?
@@ -71,6 +72,7 @@ export class PedidosRepository {
         }
       });
 
+      // SQL: COMMIT TRANSACTION
       return pedido;
     });
   }
